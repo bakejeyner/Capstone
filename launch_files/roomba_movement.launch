@@ -1,0 +1,12 @@
+<launch>
+  <node pkg="roomba_tf" type="roomba_base_link" name="roomba_base_link" />
+  
+  <node pkg="roomba_tf" type="roomba_odom" name="roomba_odom" />
+
+  <node pkg="urg_node" type="urg_node" name="urg_node">
+    <rosparam>
+        frame_id: scan
+        calibrate_time: false
+    </rosparam>
+  </node>
+</launch>
