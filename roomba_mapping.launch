@@ -1,0 +1,57 @@
+<launch>
+  <node pkg="roomba_tf" type="roomba_base_link" name="roomba_base_link" />
+  
+  <node pkg="roomba_tf" type="roomba_odom" name="roomba_odom" />
+
+  <node pkg="urg_node" type="urg_node" name="urg_node">
+    <rosparam>
+        frame_id: scan
+        calibrate_time: false
+    </rosparam>
+  </node>
+  
+  <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
+    <rosparam>
+      inverted_lazer: false
+      throttle_scans: 2
+      base_frame: base_link
+      map_frame: map
+      odom_frame: odom
+      map_update_interval: 5
+      maxUrange: 4.9
+      sigma: 0.05
+      kernelSize: 1
+      lstep: 0.05
+      astep: 0.05
+      iterations: 2
+      lsigma: 0.075
+      ogain: 3.0
+      lskip: 0
+      minimumScore: 0.0
+      srr: .1
+      srt: .2
+      str: .1
+      stt: .2
+      linearUpdate: 0.0
+      angularUpdate: 0.0
+      temporalUpdate: 1.0
+      resampleThreshold: 0.5
+      particles: 10
+      xmin: -50.0
+      ymin: -50.0
+      xmax: 50.0
+      ymax: 50.0
+      delta: 0.05
+      llsamplerange: 0.01
+      llsamplestep: 0.01
+      lasamplerange: 0.005
+      lasamplestep: 0.005
+      transform_publish_period: 0.05
+      occ_thresh: .25
+      maxRange: 5.0
+    </rosparam>
+  </node>
+  
+  <node pkg="map_server" type="map_saver" name="map_saver" output="screen" />
+
+</launch>
