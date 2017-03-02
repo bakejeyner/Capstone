@@ -4,7 +4,7 @@
   <!--- Run AMCL -->
   <include file="/opt/ros/kinetic/share/amcl/examples/amcl_omni.launch" />
 
-  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+  <node pkg="move_base" type="move_base" respawn="true" name="move_base" output="screen">
     <rosparam file="/home/roomba/ros_catkin_ws/src/roomba_tf/launch_params/costmap_common_params.yaml" command="load" ns="global_costmap" />
     <rosparam file="/home/roomba/ros_catkin_ws/src/roomba_tf/launch_params/costmap_common_params.yaml" command="load" ns="local_costmap" />
     <rosparam file="/home/roomba/ros_catkin_ws/src/roomba_tf/launch_params/local_costmap_params.yaml" command="load" />

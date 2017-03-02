@@ -1,7 +1,16 @@
 <launch>
   <node pkg="roomba_tf" type="roomba_base_link" name="roomba_base_link" />
   
-  <node pkg="roomba_tf" type="roomba_odom" name="roomba_odom" />
+  <node pkg="ca_driver" type="ca_driver" name="ca_driver">
+    <rosparam>
+      base_frame: base_link
+      dev: /dev/ttyUSB0
+      loop_hz: 5.0
+      odom_frame: odom
+      publish_tf: true
+      robot_model: ROOMBA_400
+    </rosparam>
+  </node>
 
   <node pkg="urg_node" type="urg_node" name="urg_node">
     <rosparam>
