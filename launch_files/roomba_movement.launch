@@ -16,6 +16,7 @@
     <rosparam>
         frame_id: scan
         calibrate_time: false
+        skip: 1
     </rosparam>
   </node>
 </launch>

@@ -3,8 +3,8 @@ local_costmap:
   robot_base_frame: base_link
   update_frequency: 1.0
   publish_frequency: 1.0
-  static_map: true
-  rolling_window: false
-  width: 384.0
-  height: 384.0
-  resolution: .05
+  static_map: false
+  rolling_window: true
+  width: 10.0
+  height: 10.0
+  resolution: .1

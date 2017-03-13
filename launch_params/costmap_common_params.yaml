@@ -1,9 +1,18 @@
+global_frame: odom
+robot_base_frame: base_link
+
 obstacle_range: 4.9
 raytrace_range: 5.0
 footprint: [[-0.125, -0.125], [-0.125, 0.125], [0.125, 0.125], [0.125, -0.125]]
 inflation_radius: 0.05
 
-transform_tolerance: 10
+update_frequency: 1.0
+publish_frequency: 1.0
+static_map: false
+rolling_window: true
+width: 50.0
+height: 50.0
+resolution: 0.1
 
 observation_sources: laser_scan_sensor
 

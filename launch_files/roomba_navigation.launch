@@ -1,5 +1,5 @@
 <launch>
-  <node name="map_server" pkg="map_server" type="map_server" args="/home/roomba/ros_catkin_ws/src/roomba_tf/map.yaml" />
+  <!--- <node name="map_server" pkg="map_server" type="map_server" args="/home/roomba/ros_catkin_ws/src/roomba_tf/map.yaml" /> -->
 
   <!--- Run AMCL -->
   <include file="/opt/ros/kinetic/share/amcl/examples/amcl_omni.launch" />
