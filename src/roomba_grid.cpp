@@ -1,5 +1,6 @@
 #include <ros/ros.h>
 #include <std_msgs/Int8MultiArray.h>
+#include <nav_msgs/Odometry.h>
 
 //width height and resolution of the map
   int height;
@@ -30,7 +31,7 @@ void fillSpot(double odomx, double odomy)
 
 void odomCallback(const nav_msgs::Odometry::ConstPtr& msg)
 {
-  fillSpot(msg.pose.pose.position.x, msg.pose.pose.position.y);
+  fillSpot(msg->pose.pose.position.x, msg->pose.pose.position.y);
 }
 
 int main(int argc, char** argv){
@@ -42,13 +43,13 @@ int main(int argc, char** argv){
   resolution = .04;
   heightCount = height/resolution;
   widthCount = width/resolution;
-  roombaGrid = (*int) calloc ((heightCount*widthCount), sizeof(int));
+  roombaGrid = (int*) calloc ((heightCount*widthCount), sizeof(int));
   
   
   //find the middle of the grid as our starting point
   middle = heightCount*widthCount/2;
   
-  fillSpot(0, 0, widthCount, heightCount, widthCount*heightCount/2, resolution, roombaGrid);
+  fillSpot(0, 0);
   
 
   ros::NodeHandle n;
@@ -59,7 +60,8 @@ int main(int argc, char** argv){
   while(n.ok())
   {
     std_msgs::Int8MultiArray msg;
-    msg.data = roombaGrid;
+    //vector<int> vRoombaGrid(roombaGrid, roombaGrid + sizeof roombaGrid / sizeof roombaGrid[0]);
+    msg.data.insert(msg.data.end(), &roombaGrid[0], &roombaGrid[heightCount*widthCount]);
     grid_publisher.publish(msg);
     
     ros::spinOnce();

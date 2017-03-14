@@ -1,5 +1,0 @@
-<launch>
-  <node pkg="roomba_tf" type="roomba_cmd_conversion" name="roomba_cmd_conversion" />
-  
-  <node pkg="roomba_tf" type="roomba_controller" name="roomba_controller" />
-</launch>
