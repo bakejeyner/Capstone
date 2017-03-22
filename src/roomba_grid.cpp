@@ -43,11 +43,8 @@ int main(int argc, char** argv){
   resolution = .04;
   heightCount = height/resolution;
   widthCount = width/resolution;
-  roombaGrid = (int*) calloc ((heightCount*widthCount), sizeof(int));
-  
-  
-  //find the middle of the grid as our starting point
   middle = heightCount*widthCount/2;
+  roombaGrid = (int*) calloc ((heightCount*widthCount), sizeof(int));
   
   fillSpot(0, 0);
   
