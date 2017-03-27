@@ -11,8 +11,4 @@
     <rosparam file="/home/roomba/ros_catkin_ws/src/roomba_tf/launch_params/global_costmap_params.yaml" command="load" />
     <rosparam file="/home/roomba/ros_catkin_ws/src/roomba_tf/launch_params/base_local_planner_params.yaml" command="load" />
   </node>
-  
-  <node pkg="roomba_tf" type="roomba_grid" name="roomba_grid" />
-  
-  <node pkg="roomba_tf" type="roomba_decision" name="roomba_decision" />
 </launch>

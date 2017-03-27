@@ -11,19 +11,31 @@
   int *roombaGrid;
   int middle;
   
+  double prevx;
+  double prevy;
+  
 void fillSpot(double odomx, double odomy)
 {
+  //don't check if we havn't moved
+  if (odomx == prevx && odomy == prevy) return;
+  
+  prevx = odomx;
+  prevy = odomy;
+  
   int threshold = 3;
   
-  int newPoint = middle - odomy/resolution*widthCount + odomx/resolution;
+  int newPoint = middle - ((int) odomy/resolution*widthCount) + ((int) odomx/resolution);
   
-  for (int i = -threshold; i < threshold; i++)
+  ROS_INFO("newPoint: %d", newPoint);
+  
+  for (int i = -threshold; i <= threshold; i++) //vertical
   {
-    for (int j = -threshold; j < threshold; j++)
+    for (int j = -threshold; j <= threshold; j++) //horizontal
     {
+      ROS_INFO("newPoint with shifts: %d", newPoint - i*widthCount + j);
       if (!(newPoint - i*widthCount + j > heightCount*widthCount) && !(newPoint - i*widthCount + j < 0))
       {
-        roombaGrid[newPoint] = 1;
+        roombaGrid[newPoint - i*widthCount + j] = 1;
       }
     }
   }
@@ -60,6 +72,7 @@ int main(int argc, char** argv){
     //vector<int> vRoombaGrid(roombaGrid, roombaGrid + sizeof roombaGrid / sizeof roombaGrid[0]);
     msg.data.insert(msg.data.end(), &roombaGrid[0], &roombaGrid[heightCount*widthCount]);
     grid_publisher.publish(msg);
+    ROS_INFO("published grid");
     
     ros::spinOnce();
     r.sleep();

@@ -16,8 +16,8 @@ int middle;
 int distance;
 int lastLoop;
 int lastLoopValue;
-int x; 
-int y;
+double x; 
+double y;
 
 const int costmapThreshold = 50;
 
@@ -121,12 +121,15 @@ int main(int argc, char **argv)
 { 
   ros::init(argc, argv, "roomba_decision");
 
+    ROS_INFO("Salman: Initializing width height and resolution of the map (after rosinit)");
+    fflush(stdout);
+      
   //node shit
   ros::NodeHandle n;
   
   //make a roomba grid and costmap grid subscriber
   ros::Subscriber roombaGridSub = n.subscribe("roomba_grid", 3, roombaGridCallback);
-  ros::Subscriber costmapGridSub = n.subscribe("2d_costmap", 3, costmapGridCallback);
+  ros::Subscriber costmapGridSub = n.subscribe("costmap_2d", 3, costmapGridCallback);
   
   //make service and wait
   MoveBaseClient ac("move_base", true);
@@ -140,6 +143,9 @@ int main(int argc, char **argv)
   widthCount = width/resolution;
   middle = heightCount*widthCount/2;
   
+    ROS_INFO("Salman: Initializing width height and resolution of the map");
+    fflush(stdout);
+  
   //make a message variable
   move_base_msgs::MoveBaseGoal goal;
   
@@ -149,12 +155,16 @@ int main(int argc, char **argv)
   
   int currentIndex;
   
+      ROS_INFO("Salman: before node while loop");
+      fflush(stdout);
   while ((n.ok()) && (distance <= heightCount/2))
   {
     ros::spinOnce();
-    
+          ROS_INFO("Salman: before fourForLoops");
+          fflush(stdout);
     currentIndex = fourForLoops();
-    
+          ROS_INFO("Salman: after fourForLoops :)");
+          fflush(stdout);
     //if the for loops didn't find anything
     if (currentIndex == -1) distance += 2;
     
@@ -174,15 +184,48 @@ int main(int argc, char **argv)
       }
       */
       
-      x = currentIndex % widthCount - widthCount/2;
-      y = -currentIndex / widthCount + widthCount/2;
+      x = (currentIndex % widthCount - widthCount/2)*resolution;
+      y = (-currentIndex / widthCount + widthCount/2)*resolution;
+     // x = 10;
+     // y = 5;
       
       ROS_INFO("Current Index: %d", currentIndex);
-      ROS_INFO("X Value", x);
-      ROS_INFO("Y Value: ", y);
+      ROS_INFO("X Value: %f", x);
+      ROS_INFO("Y Value: %f", y);
       
       goal.target_pose.pose.position.x = x;
       goal.target_pose.pose.position.y = y;
+      
+      switch(lastLoop)
+      {
+        case 1:
+          goal.target_pose.pose.orientation.x = 0.0;
+          goal.target_pose.pose.orientation.y = 0.0;
+          goal.target_pose.pose.orientation.z = .7071;
+          goal.target_pose.pose.orientation.w = .7071;
+          break;
+          
+        case 2:
+          goal.target_pose.pose.orientation.x = 0.0;
+          goal.target_pose.pose.orientation.y = 0.0;
+          goal.target_pose.pose.orientation.z = 1.0;
+          goal.target_pose.pose.orientation.w = 0.0;
+          break;
+          
+        case 3:
+          goal.target_pose.pose.orientation.x = 0.0;
+          goal.target_pose.pose.orientation.y = 0.0;
+          goal.target_pose.pose.orientation.z = -.7071;
+          goal.target_pose.pose.orientation.w = .7071;
+          break;
+          
+        case 4:
+          goal.target_pose.pose.orientation.x = 0.0;
+          goal.target_pose.pose.orientation.y = 0.0;
+          goal.target_pose.pose.orientation.z = 0.0;
+          goal.target_pose.pose.orientation.w = 1.0;
+          break;
+      }
       
       ac.sendGoal(goal);
       ac.waitForResult();
