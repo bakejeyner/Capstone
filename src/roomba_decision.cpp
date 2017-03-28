@@ -27,11 +27,13 @@ const signed char *costmapGrid;
 
 void roombaGridCallback(const std_msgs::Int8MultiArray::ConstPtr& msg)
 {
+  ROS_INFO("Read Roomba Grid");
   roombaGrid = &(msg->data[0]);
 }
 
 void costmapGridCallback(const nav_msgs::OccupancyGrid::ConstPtr& msg)
 {
+  ROS_INFO("Read Costmap Grid");
   costmapGrid = &(msg->data[0]);
 }
 
@@ -120,9 +122,6 @@ int fourForLoops()
 int main(int argc, char **argv)
 { 
   ros::init(argc, argv, "roomba_decision");
-
-    ROS_INFO("Salman: Initializing width height and resolution of the map (after rosinit)");
-    fflush(stdout);
       
   //node shit
   ros::NodeHandle n;
@@ -143,9 +142,6 @@ int main(int argc, char **argv)
   widthCount = width/resolution;
   middle = heightCount*widthCount/2;
   
-    ROS_INFO("Salman: Initializing width height and resolution of the map");
-    fflush(stdout);
-  
   //make a message variable
   move_base_msgs::MoveBaseGoal goal;
   
@@ -154,17 +150,12 @@ int main(int argc, char **argv)
   lastLoopValue = 99999;
   
   int currentIndex;
-  
-      ROS_INFO("Salman: before node while loop");
-      fflush(stdout);
+
   while ((n.ok()) && (distance <= heightCount/2))
   {
     ros::spinOnce();
-          ROS_INFO("Salman: before fourForLoops");
-          fflush(stdout);
     currentIndex = fourForLoops();
-          ROS_INFO("Salman: after fourForLoops :)");
-          fflush(stdout);
+
     //if the for loops didn't find anything
     if (currentIndex == -1) distance += 2;
     
@@ -231,9 +222,9 @@ int main(int argc, char **argv)
       ac.waitForResult();
       
       if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-        ROS_INFO("yaay!!");
+        ROS_INFO("Nav Goal Success!");
       else
-        ROS_INFO("naay!!");
+        ROS_INFO("Nav Goal Failure");
     }
   }
   

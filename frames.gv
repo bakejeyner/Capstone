@@ -1,8 +1,12 @@
 digraph G {
-"base_link" -> "scan"[label="Broadcaster: /roomba_base_link\nAverage rate: 2.222 Hz\nMost recent transform: 1487627753.055 ( 0.372 sec old)\nBuffer length: 4.500 sec\n"];
-"odom" -> "base_link"[label="Broadcaster: /roomba_odom\nAverage rate: 2.222 Hz\nMost recent transform: 1487627753.211 ( 0.217 sec old)\nBuffer length: 4.500 sec\n"];
+"map" -> "odom"[label="Broadcaster: /static_transform_publisher_1490739750432586535\nAverage rate: 585.814 Hz\nMost recent transform: 1490739845.691 ( 0.060 sec old)\nBuffer length: 4.778 sec\n"];
+"base_link" -> "scan"[label="Broadcaster: /roomba_base_link\nAverage rate: 2.222 Hz\nMost recent transform: 1490739845.542 ( 0.209 sec old)\nBuffer length: 4.500 sec\n"];
 edge [style=invis];
  subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
-"Recorded at time: 1487627753.428"[ shape=plaintext ] ;
- }->"odom";
+"Recorded at time: 1490739845.751"[ shape=plaintext ] ;
+ }->"map";
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1490739845.751"[ shape=plaintext ] ;
+ }->"base_link";
 }

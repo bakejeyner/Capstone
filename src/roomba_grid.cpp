@@ -22,9 +22,10 @@ void fillSpot(double odomx, double odomy)
   prevx = odomx;
   prevy = odomy;
   
-  int threshold = 3;
+  int threshold = 5;
   
   int newPoint = middle - ((int) odomy/resolution*widthCount) + ((int) odomx/resolution);
+  int shiftedPoint;
   
   ROS_INFO("newPoint: %d", newPoint);
   
@@ -32,10 +33,11 @@ void fillSpot(double odomx, double odomy)
   {
     for (int j = -threshold; j <= threshold; j++) //horizontal
     {
-      ROS_INFO("newPoint with shifts: %d", newPoint - i*widthCount + j);
-      if (!(newPoint - i*widthCount + j > heightCount*widthCount) && !(newPoint - i*widthCount + j < 0))
+      shiftedPoint = newPoint - i*widthCount + j;
+      ROS_INFO("shiftedPoint: %d", shiftedPoint);
+      if (!(shiftedPoint > heightCount*widthCount) && !(shiftedPoint < 0))
       {
-        roombaGrid[newPoint - i*widthCount + j] = 1;
+        roombaGrid[shiftedPoint] = 1;
       }
     }
   }
@@ -47,7 +49,7 @@ void odomCallback(const nav_msgs::Odometry::ConstPtr& msg)
 }
 
 int main(int argc, char** argv){
-  ros::init(argc, argv, "roomba_tf");
+  ros::init(argc, argv, "roomba_grid");
   
   //width height and resolution of the map
   height = 21;
@@ -69,6 +71,7 @@ int main(int argc, char** argv){
   while(n.ok())
   {
     std_msgs::Int8MultiArray msg;
+    
     //vector<int> vRoombaGrid(roombaGrid, roombaGrid + sizeof roombaGrid / sizeof roombaGrid[0]);
     msg.data.insert(msg.data.end(), &roombaGrid[0], &roombaGrid[heightCount*widthCount]);
     grid_publisher.publish(msg);

@@ -1,4 +1,4 @@
-global_frame: odom
+global_frame: map
 robot_base_frame: base_link
 
 obstacle_range: 4.9
@@ -9,9 +9,6 @@ inflation_radius: 0.05
 update_frequency: 1.0
 publish_frequency: 1.0
 static_map: false
-rolling_window: true
-width: 21.0
-height: 21.0
 resolution: 0.04
 
 observation_sources: laser_scan_sensor
