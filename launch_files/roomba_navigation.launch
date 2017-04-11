@@ -1,15 +1,4 @@
 <launch>
-  <!--- <node name="map_server" pkg="map_server" type="map_server" args="/home/roomba/ros_catkin_ws/src/roomba_tf/map.yaml" /> -->
-
-  
-  
-  <!--- <node pkg="topic_tools" type="relay" name="relay" args="/move_base/local_costmap/costmap /map" /> -->
-
-  <node pkg="move_base" type="move_base" respawn="true" name="move_base" output="screen">
-    <rosparam file="/home/roomba/ros_catkin_ws/src/roomba_tf/launch_params/costmap_common_params.yaml" command="load" ns="global_costmap" />
-    <rosparam file="/home/roomba/ros_catkin_ws/src/roomba_tf/launch_params/costmap_common_params.yaml" command="load" ns="local_costmap" />
-    <rosparam file="/home/roomba/ros_catkin_ws/src/roomba_tf/launch_params/local_costmap_params.yaml" command="load" ns="local_costmap" />
-    <rosparam file="/home/roomba/ros_catkin_ws/src/roomba_tf/launch_params/global_costmap_params.yaml" command="load" ns="global_costmap" />
-    <rosparam file="/home/roomba/ros_catkin_ws/src/roomba_tf/launch_params/base_local_planner_params.yaml" command="load" />
-  </node>
+  <include file="$(find roomba_tf)/launch_files_basic/gmapping.launch" />
+  <include file="$(find roomba_tf)/launch_files_basic/move_base.launch" />
 </launch>

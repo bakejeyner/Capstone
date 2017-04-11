@@ -1,0 +1,3 @@
+<launch>
+  <node pkg="tf" type="static_transform_publisher" name="static_transform_publisher_odom_base_link" args="0 0 0 0 0 0 1 odom base_link 20" />
+</launch>

@@ -1,0 +1,7 @@
+<launch>
+  <include file="$(find roomba_tf)/launch_files_basic/gmapping.launch" />
+  <include file="$(find roomba_tf)/launch_files_basic/urg_node.launch" />
+  
+  <include file="$(find roomba_tf)/launch_files_basic/base_link_scan.launch" />
+  <include file="$(find roomba_tf)/launch_files_basic/odom_base_link.launch" />
+</launch>

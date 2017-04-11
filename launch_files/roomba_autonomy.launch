@@ -1,5 +1,0 @@
-<launch>
-  <node pkg="roomba_tf" type="roomba_grid" name="roomba_grid" />
-  
-  <node pkg="roomba_tf" type="roomba_decision" name="roomba_decision" />
-</launch>

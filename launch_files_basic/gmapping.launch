@@ -21,21 +21,21 @@
       srt: .2
       str: .1
       stt: .2
-      linearUpdate: 0.1
+      linearUpdate: 0.2
       angularUpdate: 1.0
-      temporalUpdate: .1
+      temporalUpdate: -1
       resampleThreshold: 0.5
       particles: 10
-      xmin: -5.0
-      ymin: -5.0
-      xmax: 5.0
-      ymax: 5.0
+      xmin: -21.0
+      ymin: -21.0
+      xmax: 21.0
+      ymax: 21.0
       delta: 0.04
       llsamplerange: 0.01
       llsamplestep: 0.01
       lasamplerange: 0.005
       lasamplestep: 0.005
-      transform_publish_period: 0.05
+      transform_publish_period: 0.1
       occ_thresh: .25
       maxRange: 5.0
     </rosparam>

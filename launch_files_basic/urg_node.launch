@@ -1,0 +1,9 @@
+<launch>
+  <node pkg="urg_node" type="urg_node" name="urg_node">
+    <rosparam>
+        frame_id: scan
+        calibrate_time: false
+        skip: 1
+    </rosparam>
+  </node>
+</launch>

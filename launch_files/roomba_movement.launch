@@ -1,23 +1,5 @@
 <launch>
-  <node pkg="roomba_tf" type="roomba_base_link" name="roomba_base_link" />
-  
-  <node pkg="ca_driver" type="ca_driver" name="ca_driver">
-    <rosparam>
-      base_frame: base_link
-      dev: /dev/ttyUSB0
-      loop_hz: 10.0
-      odom_frame: odom
-      publish_tf: true
-      robot_model: ROOMBA_400
-      latch_cmd_duration: .2
-    </rosparam>
-  </node>
-
-  <node pkg="urg_node" type="urg_node" name="urg_node">
-    <rosparam>
-        frame_id: scan
-        calibrate_time: false
-        skip: 1
-    </rosparam>
-  </node>
+  <include file="$(find roomba_tf)/launch_files_basic/base_link_scan.launch" />
+  <include file="$(find roomba_tf)/launch_files_basic/ca_driver.launch" />
+  <include file="$(find roomba_tf)/launch_files_basic/urg_node.launch" />
 </launch>

@@ -1,5 +1,5 @@
 <launch>
-  <include file="/home/roomba/ros_catkin_ws/src/roomba_tf/launch_files/roomba_movement.launch" />
-  
-  <include file="/home/roomba/ros_catkin_ws/src/roomba_tf/launch_files/roomba_controller.launch" />
+  <include file="$(find roomba_tf)/launch_files/roomba_movement.launch" />
+
+  <include file="$(find roomba_tf)/launch_files/roomba_navigation.launch" />
 </launch>

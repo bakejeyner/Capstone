@@ -1,0 +1,9 @@
+<launch>
+  <node pkg="move_base" type="move_base" respawn="true" name="move_base" output="screen">
+    <rosparam file="$(find roomba_tf)/launch_params/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find roomba_tf)/launch_params/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find roomba_tf)/launch_params/local_costmap_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find roomba_tf)/launch_params/global_costmap_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find roomba_tf)/launch_params/base_local_planner_params.yaml" command="load" />
+  </node>
+</launch>
