@@ -1,6 +1,6 @@
 #include <ros/ros.h>
+#include <tf/transform_listener.h>
 #include <std_msgs/Int8MultiArray.h>
-#include <nav_msgs/Odometry.h>
 
 //width height and resolution of the map
   int height;
@@ -15,10 +15,7 @@
   double prevy;
   
 void fillSpot(double odomx, double odomy)
-{
-  //don't check if we havn't moved
-  if (odomx == prevx && odomy == prevy) return;
-  
+{ 
   prevx = odomx;
   prevy = odomy;
   
@@ -27,7 +24,12 @@ void fillSpot(double odomx, double odomy)
   int newPoint = middle - ((int) odomy/resolution*widthCount) + ((int) odomx/resolution);
   int shiftedPoint;
   
+  //don't check if we've been here
+  if (roombaGrid[newPoint] == 2) return;
+  
   ROS_INFO("newPoint: %d", newPoint);
+  
+  roombaGrid[newPoint] = 2;
   
   for (int i = -threshold; i <= threshold; i++) //vertical
   {
@@ -35,17 +37,12 @@ void fillSpot(double odomx, double odomy)
     {
       shiftedPoint = newPoint - i*widthCount + j;
       ROS_INFO("shiftedPoint: %d", shiftedPoint);
-      if (!(shiftedPoint > heightCount*widthCount) && !(shiftedPoint < 0))
+      if (!(shiftedPoint > heightCount*widthCount-1) && !(shiftedPoint < 0))
       {
-        roombaGrid[shiftedPoint] = 1;
+        if (roombaGrid[shiftedPoint] == 0) roombaGrid[shiftedPoint] = 1;
       }
     }
   }
-}
-
-void odomCallback(const nav_msgs::Odometry::ConstPtr& msg)
-{
-  fillSpot(msg->pose.pose.position.x, msg->pose.pose.position.y);
 }
 
 int main(int argc, char** argv){
@@ -64,7 +61,8 @@ int main(int argc, char** argv){
   
 
   ros::NodeHandle n;
-  ros::Subscriber odom_listener = n.subscribe("odom", 5, odomCallback);
+  tf::StampedTransform odomTransform;
+  tf::TransformListener odomListener;
   ros::Publisher grid_publisher = n.advertise<std_msgs::Int8MultiArray>("roomba_grid", 5);
   
   ros::Rate r(1);
@@ -72,7 +70,17 @@ int main(int argc, char** argv){
   {
     std_msgs::Int8MultiArray msg;
     
-    //vector<int> vRoombaGrid(roombaGrid, roombaGrid + sizeof roombaGrid / sizeof roombaGrid[0]);
+    //look for odom
+    try
+    {
+      odomListener.lookupTransform("map", "base_link", ros::Time(0), odomTransform);
+      fillSpot(odomTransform.getOrigin().x(), odomTransform.getOrigin().y());
+    }
+    catch (tf::TransformException ex)
+    {
+      ROS_INFO("Exception in tf stuff");
+    }
+    
     msg.data.insert(msg.data.end(), &roombaGrid[0], &roombaGrid[heightCount*widthCount]);
     grid_publisher.publish(msg);
     ROS_INFO("published grid");

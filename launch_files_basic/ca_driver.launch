@@ -3,11 +3,11 @@
     <rosparam>
       base_frame: base_link
       dev: /dev/ttyUSB0
-      loop_hz: 10.0
+      loop_hz: 5.0
       odom_frame: odom
       publish_tf: true
       robot_model: ROOMBA_400
-      latch_cmd_duration: .2
+      latch_cmd_duration: 0.5
     </rosparam>
   </node>
 </launch>

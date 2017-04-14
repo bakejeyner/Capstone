@@ -19,7 +19,7 @@ Other stuff
 rosrun ca_driver ca_driver base_frame:=base_link dev:=/dev/ttyUSB0 robot_model:=ROOMBA_400
 
 // sample cmd_vel (linear x is forward, angular z is either cw or ccw)
-rostopic pub -r 5 /cmd_vel geometry_msgs/Twist '{linear: {x: .1, y: 0, z: 0}, angular: {x: 0 y: 0, z: 0}}'
+rostopic pub -r 5 /cmd_vel geometry_msgs/Twist '{linear: {x: .1, y: 0, z: 0}, angular: {x: 0, y: 0, z: 0}}'
 
 // sample vacuum tester message
 rostopic pub -r 5 /vacuum_on std_msgs/Empty

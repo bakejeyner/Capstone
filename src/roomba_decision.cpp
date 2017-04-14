@@ -29,12 +29,25 @@ void roombaGridCallback(const std_msgs::Int8MultiArray::ConstPtr& msg)
 {
   ROS_INFO("Read Roomba Grid");
   roombaGrid = &(msg->data[0]);
+  
+  ROS_INFO("before test");
+  roombaGrid[141494];
+  ROS_INFO("after test");
+  
+  ROS_INFO("after Read Roomba Grid");
 }
 
 void costmapGridCallback(const nav_msgs::OccupancyGrid::ConstPtr& msg)
 {
   ROS_INFO("Read Costmap Grid");
   costmapGrid = &(msg->data[0]);
+  
+  ROS_INFO("before test");
+  costmapGrid[141494];
+  ROS_INFO("after test");
+  
+  
+  ROS_INFO("after Read Costmap Grid");
 }
 
 int fourForLoops()
@@ -48,10 +61,18 @@ int fourForLoops()
     for (int i = lastLoopValue; i < distance; i++)
     {
       currentIndex = middle - i*widthCount + distance;
-      if ((roombaGrid[currentIndex] == 0) && (costmapGrid[currentIndex] < costmapThreshold))
+      ROS_INFO("currentIndex: %d", currentIndex);
+      ROS_INFO("In loop: 1");
+      if (!(currentIndex > heightCount*widthCount-1) && !(currentIndex < 0))
       {
-        lastLoopValue = i;
-        return currentIndex;
+        ROS_INFO("before array accesses");
+        if ((roombaGrid[currentIndex] == 0) && (costmapGrid[currentIndex] < costmapThreshold))
+        {
+          ROS_INFO("inside array accesses");
+          lastLoopValue = i;
+          return currentIndex;
+        }
+        ROS_INFO("after array accesses");
       }
     }
     
@@ -67,10 +88,18 @@ int fourForLoops()
     for (int i = lastLoopValue; i < distance; i++)
     {
       currentIndex = middle - distance*widthCount - i;
-      if ((roombaGrid[currentIndex] == 0) && (costmapGrid[currentIndex] < costmapThreshold))
+      ROS_INFO("currentIndex: %d", currentIndex);
+      ROS_INFO("In loop: 2");
+      if (!(currentIndex > heightCount*widthCount-1) && !(currentIndex < 0))
       {
-        lastLoopValue = i;
-        return currentIndex;
+        ROS_INFO("before array accesses");
+        if ((roombaGrid[currentIndex] == 0) && (costmapGrid[currentIndex] < costmapThreshold))
+        {
+          ROS_INFO("inside array accesses");
+          lastLoopValue = i;
+          return currentIndex;
+        }
+        ROS_INFO("after array accesses");
       }
     }
     
@@ -86,10 +115,18 @@ int fourForLoops()
     for (int i = lastLoopValue; i < distance; i++)
     {
       currentIndex = middle + i*widthCount - distance;
-      if ((roombaGrid[currentIndex] == 0) && (costmapGrid[currentIndex] < costmapThreshold))
+      ROS_INFO("currentIndex: %d", currentIndex);
+      ROS_INFO("In loop: 3");
+      if (!(currentIndex > heightCount*widthCount-1) && !(currentIndex < 0))
       {
-        lastLoopValue = i;
-        return currentIndex;
+        ROS_INFO("before array accesses");
+        if ((roombaGrid[currentIndex] == 0) && (costmapGrid[currentIndex] < costmapThreshold))
+        {
+          ROS_INFO("inside array accesses");
+          lastLoopValue = i;
+          return currentIndex;
+        }
+        ROS_INFO("after array accesses");
       }
     }
     
@@ -105,10 +142,18 @@ int fourForLoops()
     for (int i = lastLoopValue; i < distance; i++)
     {
       currentIndex = middle + distance*widthCount + i;
-      if ((roombaGrid[currentIndex] == 0) && (costmapGrid[currentIndex] < costmapThreshold))
+      ROS_INFO("currentIndex: %d", currentIndex);
+      ROS_INFO("In loop: 4");
+      if (!(currentIndex > heightCount*widthCount-1) && !(currentIndex < 0))
       {
-        lastLoopValue = i;
-        return currentIndex;
+        ROS_INFO("before array accesses");
+        if ((roombaGrid[currentIndex] == 0) && (costmapGrid[currentIndex] < costmapThreshold))
+        {
+          ROS_INFO("inside array accesses");
+          lastLoopValue = i;
+          return currentIndex;
+        }
+        ROS_INFO("after array accesses");
       }
     }
     
@@ -127,8 +172,8 @@ int main(int argc, char **argv)
   ros::NodeHandle n;
   
   //make a roomba grid and costmap grid subscriber
-  ros::Subscriber roombaGridSub = n.subscribe("roomba_grid", 3, roombaGridCallback);
-  ros::Subscriber costmapGridSub = n.subscribe("costmap_2d", 3, costmapGridCallback);
+  ros::Subscriber roombaGridSub = n.subscribe("roomba_grid", 5, roombaGridCallback);
+  ros::Subscriber costmapGridSub = n.subscribe("move_base/global_costmap/costmap", 5, costmapGridCallback);
   
   //make service and wait
   MoveBaseClient ac("move_base", true);
@@ -142,6 +187,9 @@ int main(int argc, char **argv)
   widthCount = width/resolution;
   middle = heightCount*widthCount/2;
   
+  roombaGrid = (unsigned char*) calloc ((heightCount*widthCount), sizeof(unsigned char));
+  costmapGrid = (unsigned char*) calloc ((heightCount*widthCount), sizeof(unsigned char));
+  
   //make a message variable
   move_base_msgs::MoveBaseGoal goal;
   
@@ -150,11 +198,25 @@ int main(int argc, char **argv)
   lastLoopValue = 99999;
   
   int currentIndex;
+  
+  ros::Rate r(1);
 
   while ((n.ok()) && (distance <= heightCount/2))
   {
+    ROS_INFO("before spin");
     ros::spinOnce();
+    ROS_INFO("after spin");
+    
+    if (roombaGrid == NULL || costmapGrid == NULL)
+    {
+      ROS_INFO("waiting for roombagrid and costmapgrid");
+      r.sleep();
+      continue;
+    }
+    
+    ROS_INFO("before four loops");
     currentIndex = fourForLoops();
+    ROS_INFO("after four loops");
 
     //if the for loops didn't find anything
     if (currentIndex == -1) distance += 2;

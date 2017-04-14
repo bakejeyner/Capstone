@@ -131,20 +131,17 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 add_executable(roomba_grid src/roomba_grid.cpp)
 add_executable(roomba_base_link src/roomba_base_link.cpp)
 add_executable(roomba_decision src/roomba_decision.cpp)
-add_executable(roomba_controller src/roomba_controller.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 add_dependencies(roomba_grid ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(roomba_base_link ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(roomba_decision ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(roomba_controller ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(roomba_grid ${catkin_LIBRARIES})
 target_link_libraries(roomba_base_link ${catkin_LIBRARIES})
 target_link_libraries(roomba_decision ${catkin_LIBRARIES})
-target_link_libraries(roomba_controller ${catkin_LIBRARIES})
 
 
 #############
