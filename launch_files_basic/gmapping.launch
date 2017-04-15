@@ -2,7 +2,7 @@
   <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
     <rosparam>
       inverted_lazer: false
-      throttle_scans: 2
+      throttle_scans: 1
       base_frame: base_link
       map_frame: map
       odom_frame: odom
@@ -23,7 +23,7 @@
       stt: .2
       linearUpdate: 0.2
       angularUpdate: 1.0
-      temporalUpdate: -1
+      temporalUpdate: 2.0
       resampleThreshold: 0.5
       particles: 10
       xmin: -21.0

@@ -2,13 +2,15 @@
 #include <tf/transform_listener.h>
 #include <std_msgs/Int8MultiArray.h>
 
+#include <vector>
+
 //width height and resolution of the map
   int height;
   int width;
   double resolution;
   int heightCount;
   int widthCount;
-  int *roombaGrid;
+  std::vector<signed char> roombaGrid;
   int middle;
   
   double prevx;
@@ -55,7 +57,7 @@ int main(int argc, char** argv){
   heightCount = height/resolution;
   widthCount = width/resolution;
   middle = heightCount*widthCount/2;
-  roombaGrid = (int*) calloc ((heightCount*widthCount), sizeof(int));
+  roombaGrid.resize(widthCount*heightCount);
   
   fillSpot(0, 0);
   
@@ -81,7 +83,7 @@ int main(int argc, char** argv){
       ROS_INFO("Exception in tf stuff");
     }
     
-    msg.data.insert(msg.data.end(), &roombaGrid[0], &roombaGrid[heightCount*widthCount]);
+    msg.data = roombaGrid;
     grid_publisher.publish(msg);
     ROS_INFO("published grid");
     

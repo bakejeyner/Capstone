@@ -5,6 +5,8 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
 
+#include <vector>
+
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
 int height;
@@ -21,14 +23,14 @@ double y;
 
 const int costmapThreshold = 50;
 
-const signed char *roombaGrid;
-const signed char *costmapGrid;
+std::vector<signed char> roombaGrid;
+std::vector<signed char> costmapGrid;
 
 
 void roombaGridCallback(const std_msgs::Int8MultiArray::ConstPtr& msg)
 {
   ROS_INFO("Read Roomba Grid");
-  roombaGrid = &(msg->data[0]);
+  roombaGrid = msg->data;
   
   ROS_INFO("before test");
   roombaGrid[141494];
@@ -40,7 +42,7 @@ void roombaGridCallback(const std_msgs::Int8MultiArray::ConstPtr& msg)
 void costmapGridCallback(const nav_msgs::OccupancyGrid::ConstPtr& msg)
 {
   ROS_INFO("Read Costmap Grid");
-  costmapGrid = &(msg->data[0]);
+  costmapGrid = msg->data;
   
   ROS_INFO("before test");
   costmapGrid[141494];
@@ -187,9 +189,6 @@ int main(int argc, char **argv)
   widthCount = width/resolution;
   middle = heightCount*widthCount/2;
   
-  roombaGrid = (unsigned char*) calloc ((heightCount*widthCount), sizeof(unsigned char));
-  costmapGrid = (unsigned char*) calloc ((heightCount*widthCount), sizeof(unsigned char));
-  
   //make a message variable
   move_base_msgs::MoveBaseGoal goal;
   
@@ -207,7 +206,7 @@ int main(int argc, char **argv)
     ros::spinOnce();
     ROS_INFO("after spin");
     
-    if (roombaGrid == NULL || costmapGrid == NULL)
+    if (roombaGrid.size() == 0 || costmapGrid.size() == 0)
     {
       ROS_INFO("waiting for roombagrid and costmapgrid");
       r.sleep();
